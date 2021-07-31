@@ -36,7 +36,15 @@ public:
   /// split data by symbol
   std::vector<DataHelper> split (const char &c) const;
   /// get buffer ptr
-  const std::vector<char> &data() const;
+  char *data();
+  /// @}
+
+  /****************************************//**
+   * @name OPERATORS
+   *******************************************/
+  /// @{
+public:
+  const std::vector<char> &operator*() const;
   /// @}
 };
 

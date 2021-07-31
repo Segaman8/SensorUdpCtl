@@ -58,7 +58,16 @@ std::vector<DataHelper> DataHelper::split (const char &c) const
   return result;
 }
 
-const std::vector<char> &DataHelper::data() const
+char *DataHelper::data()
+{
+  return d.data();
+}
+
+/********************************************
+ * OPERATORS
+ *******************************************/
+
+const std::vector<char> &DataHelper::operator*() const
 {
   return d;
 }

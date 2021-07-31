@@ -38,7 +38,7 @@ void UdpCtl::setDivider (const double &v)
   (*Operation())->setDivider (v);
 }
 
-const char *UdpCtl::getSensorsList()
+const char *UdpCtl::getInfo()
 {
   return (*Operation())->getInfo();
 }
@@ -74,6 +74,16 @@ bool UdpCtl::getData (
   gyz = (*item)[5];
 
   return true;
+}
+
+int UdpCtl::getKeys (const int **dest)
+{
+  return (*Operation())->getKeys (dest);
+}
+
+int UdpCtl::getSize()
+{
+  return (*Operation())->getSize();
 }
 
 /*-----------------------------------------*/

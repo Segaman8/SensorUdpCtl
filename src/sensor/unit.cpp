@@ -20,11 +20,13 @@ Unit::Unit()
 }
 
 Unit::Unit (const Unit &value)
+  : m_id (0)
 {
   operator= (value);
 }
 
 Unit::Unit (const DataHelper &data)
+  : m_id (0)
 {
   /* packet structure */
   /* id acx acy acz gyx gyy gyz */
@@ -33,7 +35,7 @@ Unit::Unit (const DataHelper &data)
   auto list = data.split (' ');
 
   /* get sensor id */
-  m_id    = atoi (list.at (0).data().data());
+  m_id    = atoi (list.at (0).data());
 
   /* get divider */
   double divider = (*Operation())->divider();
@@ -92,7 +94,7 @@ int32_t fromHex (const DataHelper &v)
   };
 
   /* prepare cycle vars */
-  auto data     = v.data();
+  auto data     = *v;
   bool nibble   = false;
   int index     = 0;
 

@@ -68,6 +68,8 @@ public:
   void setMsgCounter (int msgCounter);
 
   const char *getInfo();
+  int getSize();
+  int getKeys (const int **dest);
   /// @}
 
   /****************************************//**

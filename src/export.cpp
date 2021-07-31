@@ -18,9 +18,19 @@ SENSORUDPCTL_EXPORT void setDivider (const double &v)
   Sensor::UdpCtl::setDivider (v);
 }
 
-SENSORUDPCTL_EXPORT const char *getSensorsList()
+SENSORUDPCTL_EXPORT const char *getInfo()
 {
-  return Sensor::UdpCtl::getSensorsList();
+  return Sensor::UdpCtl::getInfo();
+}
+
+SENSORUDPCTL_EXPORT int getSize()
+{
+  return Sensor::UdpCtl::getSize();
+}
+
+SENSORUDPCTL_EXPORT int getKeys (const int **dest)
+{
+  return Sensor::UdpCtl::getKeys (dest);
 }
 
 SENSORUDPCTL_EXPORT bool getData (

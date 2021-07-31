@@ -82,6 +82,35 @@ const char *Container::getInfo()
   return result.c_str();
 }
 
+int Container::getSize()
+{
+  return m_items.size();
+}
+
+int Container::getKeys (const int **dest)
+{
+  /* array holder */
+  static int *array = nullptr;
+
+  /* free old array */
+  if (array)
+    free (array);
+
+  /* alloc array */
+  int sz  = getSize();
+  array   = reinterpret_cast<int *> (malloc (sizeof (int) * sz));
+
+  /* store keys in cycle */
+  int j = 0;
+  for (auto i = m_items.begin(), e = m_items.end(); i != e; i++, j++)
+    array[j] = i->first;
+
+  /* return values */
+  if (dest)
+    *dest = array;
+  return m_items.size();
+}
+
 /********************************************
  * OPERATORS
  *******************************************/

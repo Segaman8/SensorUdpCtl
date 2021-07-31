@@ -30,7 +30,7 @@ double getDivider();
 void setDivider (const double &v);
 
 /// get string state info report
-const char *getSensorsList();
+const char *getInfo();
 
 /// get data from certain sensor by id
 bool getData (
@@ -42,6 +42,12 @@ bool getData (
   /* out */ double &gyy,
   /* out */ double &gyz
 );
+
+/// get amount of udp connected sensors
+int getSize();
+
+/// get available sensor ids
+int getKeys (const int **dest);
 
 /// @}
 };
