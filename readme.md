@@ -27,6 +27,22 @@ Doxygen documentation can be compiled ( see [Documentation](#markdown-header-doc
 
 @ref groupSensor
 
+## Supported Platforms
+
+- Linux
+
+- Windows (not tested yet)
+
+## Building
+
+```
+mkdir build
+cd build
+cmake ..
+make
+make test
+```
+
 <a id="markdown-header-usage"></a>
 ## Usage
 
@@ -37,7 +53,7 @@ Doxygen documentation can be compiled ( see [Documentation](#markdown-header-doc
 - Then execute @ref Sensor::UdpCtl::getData for every id to retreive vector values
 
 <a id="markdown-header-docs"></a>
-# Documentation 
+## Documentation 
 
 All documentation stored in "html" folder
 

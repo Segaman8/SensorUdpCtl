@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.6)
 
 # project name
 project(SensorUdpCtl LANGUAGES CXX)
+enable_testing()
 
 # standard
 set(CMAKE_CXX_STANDARD 20)
