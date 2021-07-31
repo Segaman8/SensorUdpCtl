@@ -1,26 +1,26 @@
 /* INCLUDES */
-#include "sensorudpctl.h"
-#include "sensorudpctl_global.h"
+#include "sensor/udpctl.h"
+#include "global.h"
 
 /* EXPORT */
 SENSORUDPCTL_EXPORT void init()
 {
-  SensorUdpCtl::init();
+  Sensor::UdpCtl::init();
 }
 
 SENSORUDPCTL_EXPORT double getDivider()
 {
-  return SensorUdpCtl::getDivider();
+  return Sensor::UdpCtl::getDivider();
 }
 
 SENSORUDPCTL_EXPORT void setDivider (const double &v)
 {
-  SensorUdpCtl::setDivider (v);
+  Sensor::UdpCtl::setDivider (v);
 }
 
 SENSORUDPCTL_EXPORT const char *getSensorsList()
 {
-  return SensorUdpCtl::getSensorsList();
+  return Sensor::UdpCtl::getSensorsList();
 }
 
 SENSORUDPCTL_EXPORT bool getData (
@@ -33,31 +33,7 @@ SENSORUDPCTL_EXPORT bool getData (
   /* out */ double &gyz
 )
 {
-  return SensorUdpCtl::getData (id, acx, acy, acz, gyx, gyy, gyz);
+  return Sensor::UdpCtl::getData (id, acx, acy, acz, gyx, gyy, gyz);
 }
-
-#ifdef MAKEELF
-int main (int argc, char *argv[])
-{
-  double acx, acy, acz, gyx, gyy, gyz;
-  int count = 0;
-
-  init();
-
-  while (true)
-    {
-      getData (0, acx, acy, acz, gyx, gyy, gyz);
-
-      count++;
-      if (count >= 5)
-        {
-          count = 0;
-          printf ("%s", getSensorsList());
-        }
-
-      sleep (1);
-    }
-}
-#endif // MAKEELF
 
 /*-----------------------------------------*/

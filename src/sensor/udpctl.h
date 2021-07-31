@@ -2,23 +2,37 @@
 #define SENSORUDPCTL_H
 
 /* INCLUDES */
-#include "sensorudpctl_global.h"
+#include "global.h"
 #include <vector>
 #include <map>
+
+/* NAMESPACE */
+namespace Sensor
+{
 
 /****************************************//**
  * @brief Receiver for Udp messages
  * from ESP8226+MPU6050
- * @date 30.07.2021
+ * @ingroup groupSensor
+ * @date 31.07.2021
  * @author Segaman
  *******************************************/
 
-namespace SensorUdpCtl
+namespace UdpCtl
 {
+/// initialize udp server to receive packets
 void init();
+
+/// get vector divide value
 double getDivider();
+
+/// set vector divide value
 void setDivider (const double &v);
+
+/// get string state info report
 const char *getSensorsList();
+
+/// get data from certain sensor by id
 bool getData (
   /* in  */ const int &id,
   /* out */ double &acx,
@@ -28,7 +42,10 @@ bool getData (
   /* out */ double &gyy,
   /* out */ double &gyz
 );
+
 /// @}
+};
+/*-----------------------------------------*/
 };
 
 /*-----------------------------------------*/
