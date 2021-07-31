@@ -13,9 +13,6 @@
 namespace Sensor
 {
 
-/* VARS */
-static void *threadRoutine (void *p);
-
 /********************************************
  * CONSTRUCT/DESTRUCT
  *******************************************/

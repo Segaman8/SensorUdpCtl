@@ -116,7 +116,7 @@ TEST (UdpCtl, UdpServerTest)
       if (sensorConnected == 0 && size != 0)
         {
           std::cerr << "[ WARNING  ] "
-                    << "some sensors got connected to udp server"
+                    << "Some sensors got connected to udp server"
                     << std::endl;
           sensorConnected = count;
         }
@@ -131,7 +131,7 @@ TEST (UdpCtl, UdpServerTest)
               && gyx == 0
               && gyy == 0
               && gyz == 0)
-            FAIL() << "sensor connected, but no data being sent. " << Sensor::UdpCtl::getInfo();
+            FAIL() << "Sensor connected, but no data being sent. " << Sensor::UdpCtl::getInfo();
           /* success */
           else
             return;
@@ -139,7 +139,7 @@ TEST (UdpCtl, UdpServerTest)
 
       /* count 15 seconds */
       if (++count >= 16)
-        FAIL() << "no sensors connected. " << Sensor::UdpCtl::getInfo();
+        FAIL() << "No sensors connected. " << Sensor::UdpCtl::getInfo();
 
       /* print seconds passed */
       std::cerr << "[ WAITING  ] "
@@ -149,7 +149,7 @@ TEST (UdpCtl, UdpServerTest)
     }
 
   /* save us */
-  FAIL() << "never gonna happen, but still exists for magic cases";
+  FAIL() << "Never gonna happen, but still exists for magic cases";
 }
 
 /*-----------------------------------------*/

@@ -74,10 +74,12 @@ const char *Container::getInfo()
     + std::to_string (m_msgCounter)
     + " Sensors: "
     + std::to_string (sz)
-    + " >> ";
+    + " {";
 
   for (auto i = m_items.begin(), e = m_items.end(); i != e; i++)
     result += std::to_string (i->first) + ", ";
+
+  result += "}";
 
   return result.c_str();
 }
