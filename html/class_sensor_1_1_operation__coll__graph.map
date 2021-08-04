@@ -1,0 +1,5 @@
+<map id="Sensor::Operation" name="Sensor::Operation">
+<area shape="rect" id="node1" title="sensor container operation basicaly a mutex with ptr to Container class instance" alt="" coords="99,109,238,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,161,47"/>
+<area shape="rect" id="node3" href="$class_sensor_1_1_container.html" title="definition of one unit Unit made of ESP8226+MPU6050" alt="" coords="185,13,323,39"/>
+</map>
