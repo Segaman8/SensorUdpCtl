@@ -23,12 +23,12 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "Sensor Udp Controler", "index.html", [
-    [ "Description", "index.html#autotoc_md0", [
-      [ "Table of contents", "index.html#autotoc_md1", null ],
-      [ "Supported Platforms", "index.html#autotoc_md2", null ],
-      [ "Building", "index.html#autotoc_md3", null ],
-      [ "Usage", "index.html#autotoc_md4", null ],
-      [ "Documentation", "index.html#autotoc_md5", null ]
+    [ "Description", "index.html#autotoc_md1", [
+      [ "Table of contents", "index.html#autotoc_md2", null ],
+      [ "Supported Platforms", "index.html#autotoc_md3", null ],
+      [ "Building", "index.html#autotoc_md4", null ],
+      [ "Usage", "index.html#autotoc_md5", null ],
+      [ "Documentation", "index.html#autotoc_md6", null ]
     ] ],
     [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", "namespaces.html", [

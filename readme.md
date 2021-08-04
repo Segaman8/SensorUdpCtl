@@ -1,3 +1,7 @@
+# Read full version
+
+[**Sensor Udp Controller Documentation Site**](https://segaman8.github.io/SensorUdpCtl/)
+
 @mainpage
 @tableofcontents
 
