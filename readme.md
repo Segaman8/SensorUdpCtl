@@ -59,7 +59,9 @@ make test
 <a id="markdown-header-docs"></a>
 ## Documentation 
 
-All documentation stored in "html" folder
+Can be accessed via [**link**](https://segaman8.github.io/SensorUdpCtl/)
+
+All documentation stored in "docs/html" folder
 
 If you don't have "html" folder:
 
@@ -68,5 +70,3 @@ If you don't have "html" folder:
 2. Launch "doxygen" inside root folder
 
 3. Open "html/index.html" with your browser
-
-!WARNING! NEVER ADD "html" INTO SOURCES!
