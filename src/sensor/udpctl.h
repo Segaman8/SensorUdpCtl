@@ -23,6 +23,10 @@ namespace UdpCtl
 /// initialize udp server to receive packets
 void init();
 
+/// finish udp socket thread
+/// @return true when thread successfully stopped, false if there is no thread present
+bool deinit();
+
 /// get vector divide value
 double getDivider();
 

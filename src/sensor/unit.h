@@ -24,7 +24,8 @@ class Unit
   /// @{
 private:
   int64_t m_id;
-  double values[6];
+  double m_values[6];
+  bool m_valid;
   /// @}
 
   /****************************************//**
@@ -34,6 +35,7 @@ private:
 public:
   Unit();
   Unit (const Unit &value);
+  Unit (Unit &&value) = delete;
   Unit (const DataHelper &data);
   ~Unit();
   /// @}
@@ -44,6 +46,7 @@ public:
   /// @{
 public:
   int id() const;
+  bool isValid() const;
   /// @}
 
   /****************************************//**
@@ -52,7 +55,8 @@ public:
   /// @{
 public:
   Unit &operator= (const Unit &value);
-  double operator[] (const int index) const;
+  Unit &operator= (Unit &&value) = delete;
+  double operator[] (const int &index) const;
   /// @}
 };
 /*-----------------------------------------*/

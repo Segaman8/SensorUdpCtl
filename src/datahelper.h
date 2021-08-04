@@ -25,7 +25,7 @@ private:
    *******************************************/
   /// @{
 public:
-  DataHelper (const char *data, const size_t &size);
+  explicit DataHelper (const char *data, const size_t &size);
   /// @}
 
   /****************************************//**

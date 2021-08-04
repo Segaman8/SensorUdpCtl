@@ -8,6 +8,11 @@ SENSORUDPCTL_EXPORT void init()
   Sensor::UdpCtl::init();
 }
 
+SENSORUDPCTL_EXPORT void deinit()
+{
+  Sensor::UdpCtl::deinit();
+}
+
 SENSORUDPCTL_EXPORT double getDivider()
 {
   return Sensor::UdpCtl::getDivider();

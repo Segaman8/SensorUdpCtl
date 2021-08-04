@@ -27,21 +27,11 @@ class Container
    *******************************************/
   /// @{
 protected:
-
-  /// units map
-  std::map<int, Unit> m_items;
-
-  /// vector divider
-  double m_divider  = 512.0;
-
-  /// udp server state
-  bool m_bindState  = false;
-
-  /// udp messages counter
-  int m_msgCounter  = 0;
-
-  /// udp thread
-  pthread_t m_thread;
+  std::map<int, Unit> m_items;  ///< units map
+  double m_divider  = 512.0;    ///< vector divider
+  bool m_bindState  = false;    ///< udp server state
+  int m_msgCounter  = 0;        ///< udp messages counter
+  pthread_t m_thread;           ///< udp thread
   /// @}
 
   /****************************************//**
@@ -50,6 +40,9 @@ protected:
   /// @{
 protected:
   Container();
+  Container (const Container &) = delete;
+  Container (Container &&) = delete;
+  ~Container();
   /// @}
 
   /****************************************//**
@@ -77,8 +70,11 @@ public:
    *******************************************/
   /// @{
 public:
-  Container &operator+= (Unit &u);
-  const Unit *operator[] (const int &id);
+  Container &operator= (const Container &) = delete;
+  Container &operator= (Container &&) = delete;
+  Container &operator+= (const Unit &u);
+  Container &operator+= (Unit &&u);
+  Unit operator[] (const int &id);
   /// @}
 };
 /*-----------------------------------------*/

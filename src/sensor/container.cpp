@@ -2,6 +2,7 @@
 #include "container.h"
 #include "operation.h"
 
+#include <iostream>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -11,8 +12,12 @@
 namespace Sensor
 {
 
+/* VARS */
+static void *threadRoutine (void *);
+static int serSockDes; ///< socket id
+
 /* LINKS */
-static void *threadRoutine (void *p);
+static void except (const std::exception &ex);
 
 /********************************************
  * CONSTRUCT/DESTRUCT
@@ -21,6 +26,14 @@ static void *threadRoutine (void *p);
 Container::Container()
 {
   pthread_create (&m_thread, nullptr, &threadRoutine, nullptr);
+}
+
+Container::~Container()
+{
+  /* stop socket */
+  shutdown (serSockDes, SHUT_RDWR);
+  /* wait thread to finish */
+  pthread_join (m_thread, nullptr);
 }
 
 /********************************************
@@ -117,27 +130,33 @@ int Container::getKeys (const int **dest)
  * OPERATORS
  *******************************************/
 
-Container &Container::operator+= (Unit &u)
+Container &Container::operator+= (const Unit &u)
 {
   m_items[u.id()] = u;
   return *this;
 }
 
-const Unit *Container::operator[] (const int &id)
+Container &Container::operator+= (Unit &&u)
+{
+  m_items[u.id()] = u;
+  return *this;
+}
+
+Unit Container::operator [] (const int &id)
 {
   if (!m_items.contains (id))
-    return nullptr;
-  return &m_items[id];
+    return Unit();
+  return m_items[id];
 }
 
 /********************************************
  * THREAD
  *******************************************/
 
-void *threadRoutine (void *p)
+void *threadRoutine (void *)
 {
   /* vars */
-  int serSockDes, readStatus;
+  int readStatus;
   struct sockaddr_in serAddr, cliAddr;
   socklen_t cliAddrLen = sizeof (cliAddr);
   char buff[1024] = {0};
@@ -156,14 +175,24 @@ void *threadRoutine (void *p)
     //inet_addr ("192.168.0.255");
     INADDR_ANY;
 
-  if ((bind (serSockDes, (struct sockaddr *)&serAddr, sizeof (serAddr))) < 0)
+  /* bind with trycatch */
+  try
     {
-      (*Operation())->setBindState (false);
-      close (serSockDes);
-      return nullptr;
+      if ((bind (serSockDes, (struct sockaddr *)&serAddr, sizeof (serAddr))) < 0)
+        {
+          Operation()()->setBindState (false);
+          close (serSockDes);
+          return nullptr;
+        }
+      else
+        Operation()()->setBindState (true);
     }
-  else
-    (*Operation())->setBindState (true);
+  catch (const std::exception &ex)
+    {
+      except (ex);
+      close (serSockDes);
+      return 0;
+    }
 
   /* read via cycle */
   while (true)
@@ -177,32 +206,49 @@ void *threadRoutine (void *p)
           &cliAddrLen
         );
 
-      /* got error */
-      if (readStatus < 0)
+      try
         {
-          (*Operation())->setBindState (false);
-          close (serSockDes);
-          return nullptr;
+          /* got error */
+          if (readStatus < 0)
+            {
+              Operation()()->setBindState (false);
+              close (serSockDes);
+              return nullptr;
+            }
+
+          /* finalize */
+          buff[readStatus] = '\0';
+
+          {
+            /* begin operation */
+            Operation op;
+
+            /* increase counter */
+            op()->incMsgCounter();
+
+            /* parse and store */
+            op += DataHelper (buff, readStatus);
+          }
         }
-
-      /* finalize */
-      buff[readStatus] = '\0';
-
-      {
-        Operation o;
-
-        /* counter */
-        (*o)->incMsgCounter();
-
-        /* parse and store */
-        Unit item (DataHelper (buff, readStatus));
-        (**o) += item;
-      }
+      catch (const std::exception &ex)
+        {
+          except (ex);
+          break;
+        }
     }
 
   /* finish */
   close (serSockDes);
+
+  return 0;
 }
+
+void except (const std::exception &ex)
+{
+  std::cout << "UdpCtlThread caught an issue: " << ex.what() << std::endl;
+  std::cout << "UdpCtlThread will be finished." << std::endl;
+}
+
 
 /*-----------------------------------------*/
 };

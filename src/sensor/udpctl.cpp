@@ -5,6 +5,7 @@
 #include "container.h"
 #include "operation.h"
 
+#include <iostream>
 #include <cstring>
 #include <string>
 #include <mutex>
@@ -14,30 +15,70 @@ namespace Sensor
 {
 
 /********************************************
- * CONSTRUCT/DESTRUCT
+ * FUNCTIONS
  *******************************************/
 
 void UdpCtl::init()
 {
-  Operation o;
+  try
+    {
+      Operation::start();
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+    }
 }
 
-/********************************************
- * STATIC METHODS
- *******************************************/
+bool UdpCtl::deinit()
+{
+  try
+    {
+      return Operation::stop();
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+      return false;
+    }
+}
+
 double UdpCtl::getDivider()
 {
-  return (*Operation())->divider();
+  try
+    {
+      return Operation()()->divider();
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+      return 0.0;
+    }
 }
 
 void UdpCtl::setDivider (const double &v)
 {
-  (*Operation())->setDivider (v);
+  try
+    {
+      Operation()()->setDivider (v);
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+    }
 }
 
 const char *UdpCtl::getInfo()
 {
-  return (*Operation())->getInfo();
+  try
+    {
+      return Operation()()->getInfo();
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+      return "";
+    }
 }
 
 bool UdpCtl::getData (
@@ -50,37 +91,61 @@ bool UdpCtl::getData (
   /* out */ double &gyz
 )
 {
-  Operation o;
-  auto item = (**o)[id];
-
-  /* if not present */
-  if (item == nullptr)
+  try
     {
-      /* return empty */
-      acx = 0; acy = 0; acz = 0;
-      gyx = 0; gyy = 0; gyz = 0;
+      Operation o;
+      auto item = o[id];
+
+      /* if not present */
+      if (!item.isValid())
+        {
+          /* return empty */
+          acx = 0; acy = 0; acz = 0;
+          gyx = 0; gyy = 0; gyz = 0;
+          return false;
+        }
+
+      /* get it's values */
+      acx = item[0];
+      acy = item[1];
+      acz = item[2];
+      gyx = item[3];
+      gyy = item[4];
+      gyz = item[5];
+
+      return true;
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
       return false;
     }
-
-  /* get it's values */
-  acx = (*item)[0];
-  acy = (*item)[1];
-  acz = (*item)[2];
-  gyx = (*item)[3];
-  gyy = (*item)[4];
-  gyz = (*item)[5];
-
-  return true;
 }
 
 int UdpCtl::getKeys (const int **dest)
 {
-  return (*Operation())->getKeys (dest);
+  try
+    {
+      return Operation()()->getKeys (dest);
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+      return 0;
+    }
 }
 
 int UdpCtl::getSize()
 {
-  return (*Operation())->getSize();
+  try
+    {
+      return Operation()()->getSize();
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+      return 0;
+    }
 }
 
 /*-----------------------------------------*/

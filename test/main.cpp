@@ -85,6 +85,17 @@ TEST (Unit, ParseTest)
 
 /*-----------------------------------------*/
 
+TEST (UdpCtl, StartStopTest)
+{
+  /* start udp ctl */
+  Sensor::UdpCtl::init();
+
+  /* stop and check */
+  EXPECT_EQ (true, Sensor::UdpCtl::deinit());
+}
+
+/*-----------------------------------------*/
+
 TEST (UdpCtl, UdpServerTest)
 {
   /* print warning */
@@ -108,44 +119,73 @@ TEST (UdpCtl, UdpServerTest)
       /* wait 1 second */
       sleep (1);
 
-      /* get current sensors amount and sensor 0 data */
-      int size = Sensor::UdpCtl::getSize();
-      Sensor::UdpCtl::getData (0, acx, acy, acz, gyx, gyy, gyz);
-
-      /* store stamp when first sensor connected */
-      if (sensorConnected == 0 && size != 0)
+      try
         {
-          std::cerr << "[ WARNING  ] "
-                    << "Some sensors got connected to udp server"
+          /* get current sensors */
+          const int *keys = nullptr;
+          int size        = Sensor::UdpCtl::getKeys (&keys);
+
+          /* check issue */
+          if (size == 0)
+            {
+              /* count 15 seconds */
+              if (++count >= 16)
+                throw std::runtime_error ("No sensors connected.");
+
+              throw size;
+            }
+
+          /* get first sensor data */
+          Sensor::UdpCtl::getData (
+            keys[0],
+            acx, acy, acz,
+            gyx, gyy, gyz);
+
+          /* store stamp when first sensor connected */
+          if (sensorConnected == 0)
+            {
+              std::cerr << "[ WARNING  ] "
+                        << "Got sensors connected to udp server"
+                        << std::endl;
+              sensorConnected = count;
+            }
+
+          /* check if time passed */
+          else if (sensorConnected < count)
+            {
+              /* if no data present, print fail */
+              if (acx == 0
+                  && acy == 0
+                  && acz == 0
+                  && gyx == 0
+                  && gyy == 0
+                  && gyz == 0)
+                throw std::runtime_error ("Sensor is connected, but no data being sent.");
+              /* success */
+              else
+                return;
+            }
+        }
+
+      catch (const std::exception &ex)
+        {
+          FAIL() << ex.what()
+                 << " >> Sensor::UdpCtl::getInfo: " << Sensor::UdpCtl::getInfo();
+        }
+
+      catch (const int &size)
+        {
+          /* print seconds passed */
+          std::cerr << "[ WAITING  ] "
+                    << count
+                    << " seconds passed"
                     << std::endl;
-          sensorConnected = count;
         }
 
-      /* check if time passed */
-      else if (sensorConnected < count && size != 0)
+      catch (...)
         {
-          /* if no data present, print fail */
-          if (acx == 0
-              && acy == 0
-              && acz == 0
-              && gyx == 0
-              && gyy == 0
-              && gyz == 0)
-            FAIL() << "Sensor connected, but no data being sent. " << Sensor::UdpCtl::getInfo();
-          /* success */
-          else
-            return;
+          FAIL() << "Unkown error catch!";
         }
-
-      /* count 15 seconds */
-      if (++count >= 16)
-        FAIL() << "No sensors connected. " << Sensor::UdpCtl::getInfo();
-
-      /* print seconds passed */
-      std::cerr << "[ WAITING  ] "
-                << count
-                << " seconds passed"
-                << std::endl;
     }
 
   /* save us */

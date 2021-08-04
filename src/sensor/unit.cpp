@@ -1,11 +1,16 @@
 /* INCLUDES */
 #include "unit.h"
 #include "operation.h"
+
+#include <iostream>
 #include <cstring>
 
 /* NAMESPACE */
 namespace Sensor
 {
+
+/* DEFS */
+#define VALUES (7)
 
 /* LINKS */
 static int32_t fromHex (const DataHelper &v);
@@ -34,15 +39,34 @@ Unit::Unit (const DataHelper &data)
   /* sep packet by space */
   auto list = data.split (' ');
 
+  /* check if empty or corrupted data get */
+  if (list.size() != VALUES)
+    {
+      memset (this, 0, sizeof (Unit));
+      return;
+    }
+
   /* get sensor id */
   m_id    = atoi (list.at (0).data());
 
-  /* get divider */
-  double divider = (*Operation())->divider();
+  /* get divider or use default */
+  double divider = 512.0;
+  if (Operation::isValid())
+    try
+      {
+        divider = Operation()()->divider();
+      }
+    catch (const std::exception &ex)
+      {
+        std::cout << ex.what() << std::endl;
+      }
 
   /* get data via cycle */
   for (int i = 1; i < 7; i++)
-    values[i - 1] = double (fromHex (list.at (i))) / divider;
+    m_values[i - 1] = double (fromHex (list.at (i))) / divider;
+
+  /* set as valid */
+  m_valid = true;
 }
 
 Unit::~Unit()
@@ -59,6 +83,11 @@ int Unit::id() const
   return m_id;
 }
 
+bool Unit::isValid() const
+{
+  return m_valid;
+}
+
 /********************************************
  * OPERATORS
  *******************************************/
@@ -68,16 +97,22 @@ Unit &Unit::operator= (const Unit &v)
   this->m_id    = v.m_id;
 
   for (int i = 0; i < 6; i++)
-    this->values[i] = v.values[i];
+    this->m_values[i] = v.m_values[i];
+
+  m_valid = v.m_valid;
 
   return *this;
 }
 
-double Unit::operator[] (const int index) const
+double Unit::operator[] (const int &index) const
 {
+  if (!m_valid)
+    return 0.0;
+
   if (index < 6)
-    return values[index];
-  return 0;
+    return m_values[index];
+
+  return 0.0;
 }
 
 /********************************************
