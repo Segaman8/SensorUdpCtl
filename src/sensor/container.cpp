@@ -132,13 +132,15 @@ int Container::getKeys (const int **dest)
 
 Container &Container::operator+= (const Unit &u)
 {
-  m_items[u.id()] = u;
+  m_items.emplace (u.id(), u);
+//  m_items[u.id()] = u;
   return *this;
 }
 
 Container &Container::operator+= (Unit &&u)
 {
-  m_items[u.id()] = u;
+  m_items.emplace (u.id(), u);
+//  m_items[u.id()] = u;
   return *this;
 }
 
