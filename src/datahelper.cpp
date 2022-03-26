@@ -30,7 +30,8 @@ std::vector<DataHelper> DataHelper::split (const char &c) const
           /* store */
           if (end - begin)
             {
-              DataHelper value (d.data() + begin, end - begin);
+              DataHelper value (d.data() + begin, end - begin + 1);
+              value.data()[end - begin] = '\0';
               result.push_back (value);
             }
 

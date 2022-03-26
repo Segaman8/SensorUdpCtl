@@ -24,7 +24,7 @@ class Unit
   /// @{
 private:
   int64_t m_id;
-  double m_values[6];
+  float m_values[9];
   bool m_valid;
   /// @}
 
@@ -56,7 +56,7 @@ public:
 public:
   Unit &operator= (const Unit &value);
   Unit &operator= (Unit &&value) = delete;
-  double operator[] (const int &index) const;
+  float operator[] (const int &index) const;
   /// @}
 };
 /*-----------------------------------------*/

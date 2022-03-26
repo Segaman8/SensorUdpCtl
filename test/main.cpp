@@ -14,17 +14,18 @@ static char msgBuffer[256];
 static const char *const results[] =
 {
   "0",
-  "00000422", "07041FEB",
-  "FE0000E0", "00900000",
-  "E0000000", "000041FE"
+  "-4.53", "-5.72", "-0.54",
+  "0.02", "-0.02", "1.02",
+  "0.02", "0.00", "0.01"
 };
-static const double values[] =
+static const float values[] =
 {
   0x0,
-  int32_t (0x00000422) / 512.0, int32_t (0x07041FEB) / 512.0,
-  int32_t (0xFE0000E0) / 512.0, int32_t (0x00900000) / 512.0,
-  int32_t (0xE0000000) / 512.0, int32_t (0x000041FE) / 512.0
+  -4.53, -5.72, -0.54,
+  0.02, -0.02, 1.02,
+  0.02, 0.00, 0.01
 };
+// 0 -4.53 -5.72 -0.54 0.02 -0.02 1.02 0.02 0.00 0.01
 
 /********************************************
  * MAIN
@@ -35,10 +36,11 @@ int main (int argc, char *argv[])
   /* build sensor message */
   sprintf (
     msgBuffer,
-    "%s %s %s %s %s %s %s",
+    "%s %s %s %s %s %s %s %s %s %s",
     results[0],
     results[1], results[2], results[3],
-    results[4], results[5], results[6]
+    results[4], results[5], results[6],
+    results[7], results[8], results[9]
   );
 
   testing::InitGoogleTest (&argc, argv);
@@ -77,10 +79,14 @@ TEST (Unit, ParseTest)
 
   /* check vector values */
   for (size_t i = 1; i < GTEST_ARRAY_SIZE_ (values); i++)
-    EXPECT_EQ (u[i - 1], values[i])
-        << "i: " << i
-        << ", unit: " << u[i - 1]
-        << ", expects: " << values[i];
+    {
+      auto a = u[i - 1];
+      auto b = values[i];
+      EXPECT_EQ (a, b)
+          << "i: " << i
+          << ", unit: " << a
+          << ", expects: " << b;
+    }
 }
 
 /*-----------------------------------------*/
@@ -105,9 +111,9 @@ TEST (UdpCtl, UdpServerTest)
             << std::endl;
 
   /* vars */
-  double acx = 0, acy = 0,
-         acz = 0, gyx = 0,
-         gyy = 0, gyz = 0;
+  float roll = 0, pitch = 0, yaw = 0,
+        acx = 0, acy = 0, acz = 0,
+        gyx = 0, gyy = 0, gyz = 0;
   int count = 1, sensorConnected = 0;
 
   /* start udp ctl */
@@ -136,10 +142,15 @@ TEST (UdpCtl, UdpServerTest)
             }
 
           /* get first sensor data */
-          Sensor::UdpCtl::getData (
+          Sensor::UdpCtl::getYpr (
             keys[0],
-            acx, acy, acz,
-            gyx, gyy, gyz);
+            &roll, &pitch, &yaw);
+          Sensor::UdpCtl::getAcc (
+            keys[0],
+            &acx, &acy, &acz);
+          Sensor::UdpCtl::getGy (
+            keys[0],
+            &gyx, &gyy, &gyz);
 
           /* store stamp when first sensor connected */
           if (sensorConnected == 0)
@@ -151,10 +162,13 @@ TEST (UdpCtl, UdpServerTest)
             }
 
           /* check if time passed */
-          else if (sensorConnected < count)
+          else if (sensorConnected <= count)
             {
               /* if no data present, print fail */
-              if (acx == 0
+              if (roll == 0
+                  && pitch == 0
+                  && yaw == 0
+                  && acx == 0
                   && acy == 0
                   && acz == 0
                   && gyx == 0
@@ -163,7 +177,10 @@ TEST (UdpCtl, UdpServerTest)
                 throw std::runtime_error ("Sensor is connected, but no data being sent.");
               /* success */
               else
-                return;
+                {
+                  EXPECT_TRUE (sensorConnected);
+                  return;
+                }
             }
         }
 

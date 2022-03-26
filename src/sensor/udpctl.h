@@ -27,24 +27,29 @@ void init();
 /// @return true when thread successfully stopped, false if there is no thread present
 bool deinit();
 
-/// get vector divide value
-double getDivider();
-
-/// set vector divide value
-void setDivider (const double &v);
-
 /// get string state info report
 const char *getInfo();
 
 /// get data from certain sensor by id
-bool getData (
+bool getYpr (
   /* in  */ const int &id,
-  /* out */ double &acx,
-  /* out */ double &acy,
-  /* out */ double &acz,
-  /* out */ double &gyx,
-  /* out */ double &gyy,
-  /* out */ double &gyz
+  /* out */ float *roll,
+  /* out */ float *pitch,
+  /* out */ float *yaw
+);
+
+bool getAcc (
+  /* in  */ const int &id,
+  /* out */ float *acx,
+  /* out */ float *acy,
+  /* out */ float *acz
+);
+
+bool getGy (
+  /* in  */ const int &id,
+  /* out */ float *gyx,
+  /* out */ float *gyy,
+  /* out */ float *gyz
 );
 
 /// get amount of udp connected sensors

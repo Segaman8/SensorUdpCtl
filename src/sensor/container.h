@@ -28,7 +28,6 @@ class Container
   /// @{
 protected:
   std::map<int, Unit> m_items;  ///< units map
-  double m_divider  = 512.0;    ///< vector divider
   bool m_bindState  = false;    ///< udp server state
   int m_msgCounter  = 0;        ///< udp messages counter
   pthread_t m_thread;           ///< udp thread
@@ -50,9 +49,6 @@ protected:
    *******************************************/
   /// @{
 public:
-  double divider() const;
-  void setDivider (double divider);
-
   bool bindState() const;
   void setBindState (bool bindState);
 

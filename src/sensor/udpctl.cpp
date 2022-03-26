@@ -43,31 +43,6 @@ bool UdpCtl::deinit()
     }
 }
 
-double UdpCtl::getDivider()
-{
-  try
-    {
-      return Operation()()->divider();
-    }
-  catch (const std::exception &ex)
-    {
-      std::cout << ex.what() << std::endl;
-      return 0.0;
-    }
-}
-
-void UdpCtl::setDivider (const double &v)
-{
-  try
-    {
-      Operation()()->setDivider (v);
-    }
-  catch (const std::exception &ex)
-    {
-      std::cout << ex.what() << std::endl;
-    }
-}
-
 const char *UdpCtl::getInfo()
 {
   try
@@ -78,47 +53,6 @@ const char *UdpCtl::getInfo()
     {
       std::cout << ex.what() << std::endl;
       return "";
-    }
-}
-
-bool UdpCtl::getData (
-  /* in  */ const int &id,
-  /* out */ double &acx,
-  /* out */ double &acy,
-  /* out */ double &acz,
-  /* out */ double &gyx,
-  /* out */ double &gyy,
-  /* out */ double &gyz
-)
-{
-  try
-    {
-      Operation o;
-      auto item = o[id];
-
-      /* if not present */
-      if (!item.isValid())
-        {
-          /* return empty */
-          acx = 0; acy = 0; acz = 0;
-          gyx = 0; gyy = 0; gyz = 0;
-          return false;
-        }
-
-      /* get it's values */
-      acx = item[0];
-      acy = item[1];
-      acz = item[2];
-      gyx = item[3];
-      gyy = item[4];
-      gyz = item[5];
-
-      return true;
-    }
-  catch (const std::exception &ex)
-    {
-      std::cout << ex.what() << std::endl;
-      return false;
     }
 }
 
@@ -145,6 +79,93 @@ int UdpCtl::getSize()
     {
       std::cout << ex.what() << std::endl;
       return 0;
+    }
+}
+
+bool UdpCtl::getYpr (const int &id, float *roll, float *pitch, float *yaw)
+{
+  try
+    {
+      Operation o;
+      auto item = o[id];
+
+      /* if not present */
+      if (!item.isValid())
+        {
+          /* return empty */
+          *roll = 0; *pitch = 0; *yaw = 0;
+          return false;
+        }
+
+      /* get it's values */
+      *roll = item[0];
+      *pitch = item[1];
+      *yaw = item[2];
+
+      return true;
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+      return false;
+    }
+}
+
+bool UdpCtl::getAcc (const int &id, float *acx, float *acy, float *acz)
+{
+  try
+    {
+      Operation o;
+      auto item = o[id];
+
+      /* if not present */
+      if (!item.isValid())
+        {
+          /* return empty */
+          *acx = 0; *acy = 0; *acz = 0;
+          return false;
+        }
+
+      /* get it's values */
+      *acx = item[3];
+      *acy = item[4];
+      *acz = item[5];
+
+      return true;
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+      return false;
+    }
+}
+
+bool UdpCtl::getGy (const int &id, float *gyx, float *gyy, float *gyz)
+{
+  try
+    {
+      Operation o;
+      auto item = o[id];
+
+      /* if not present */
+      if (!item.isValid())
+        {
+          /* return empty */
+          *gyx = 0; *gyy = 0; *gyz = 0;
+          return false;
+        }
+
+      /* get it's values */
+      *gyx = item[6];
+      *gyy = item[7];
+      *gyz = item[8];
+
+      return true;
+    }
+  catch (const std::exception &ex)
+    {
+      std::cout << ex.what() << std::endl;
+      return false;
     }
 }
 

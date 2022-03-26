@@ -40,16 +40,6 @@ Container::~Container()
  * PUBLIC METHODS
  *******************************************/
 
-double Container::divider() const
-{
-  return m_divider;
-}
-
-void Container::setDivider (double divider)
-{
-  m_divider = divider;
-}
-
 bool Container::bindState() const
 {
   return m_bindState;
